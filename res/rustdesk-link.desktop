@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=RustDesk
+Name=OuterD
 NoDisplay=true
-MimeType=x-scheme-handler/rustdesk;
-TryExec=rustdesk
-Exec=rustdesk %u
-Icon=rustdesk
+MimeType=x-scheme-handler/outerd;
+TryExec=outerd
+Exec=outerd %u
+Icon=outerd
 Terminal=false
 Type=Application
 StartupNotify=false
-StartupWMClass=rustdesk
+StartupWMClass=outerd

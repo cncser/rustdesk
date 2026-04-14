@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Script to build F-Droid release of RustDesk
+# Script to build F-Droid release of OuterD
 #
-# Copyright (C) 2024, The RustDesk Authors
+# Copyright (C) 2024, The OuterD Authors
 #               2024, Vasyl Gello <vasek.gello@gmail.com>
 #
 
@@ -11,8 +11,8 @@
 #
 # It accepts the following arguments:
 #
-# - versionName from https://github.com/rustdesk/rustdesk/releases/download/fdroid-version/rustdesk-version.txt
-# - versionCode from https://github.com/rustdesk/rustdesk/releases/download/fdroid-version/rustdesk-version.txt
+# - versionName from https://github.com/outerd/outerd/releases/download/fdroid-version/outerd-version.txt
+# - versionCode from https://github.com/outerd/outerd/releases/download/fdroid-version/outerd-version.txt
 # - Android architecture to build APK for: armeabi-v7a arm64-v8av x86 x86_64
 # - The build step to execute:
 #
@@ -77,25 +77,25 @@ arm64-v8a)
 	FLUTTER_TARGET=android-arm64
 	NDK_TARGET=aarch64-linux-android
 	RUST_TARGET=aarch64-linux-android
-	RUSTDESK_FEATURES='flutter,hwcodec'
+	OUTERD_FEATURES='flutter,hwcodec'
 	;;
 armeabi-v7a)
 	FLUTTER_TARGET=android-arm
 	NDK_TARGET=arm-linux-androideabi
 	RUST_TARGET=armv7-linux-androideabi
-	RUSTDESK_FEATURES='flutter,hwcodec'
+	OUTERD_FEATURES='flutter,hwcodec'
 	;;
 x86_64)
 	FLUTTER_TARGET=android-x64
 	NDK_TARGET=x86_64-linux-android
 	RUST_TARGET=x86_64-linux-android
-	RUSTDESK_FEATURES='flutter'
+	OUTERD_FEATURES='flutter'
 	;;
 x86)
 	FLUTTER_TARGET=android-x86
 	NDK_TARGET=i686-linux-android
 	RUST_TARGET=i686-linux-android
-	RUSTDESK_FEATURES='flutter'
+	OUTERD_FEATURES='flutter'
 	;;
 *)
 	echo "ERROR: Unknown Android ABI '${ANDROID_ABI}'!" >&2
@@ -302,7 +302,7 @@ prebuild)
 		fi
 	fi
 
-	# Patch the RustDesk sources
+	# Patch the OuterD sources
 
 	git apply res/fdroid/patches/*.patch
 
@@ -367,7 +367,7 @@ prebuild)
 		unset BRIDGE_LLVM_PATH
 	fi
 
-	# Install Flutter version for RustDesk library build
+	# Install Flutter version for OuterD library build
 
 	prepare_flutter "${FLUTTER_VERSION}" "${HOME}/flutter"
 
@@ -453,7 +453,7 @@ build)
 
 	bash flutter/build_android_deps.sh "${ANDROID_ABI}"
 
-	# Build rustdesk lib
+	# Build outerd lib
 
 	cargo ndk \
 		--platform 21 \
@@ -461,12 +461,12 @@ build)
 		--bindgen \
 		build \
 		--release \
-		--features "${RUSTDESK_FEATURES}"
+		--features "${OUTERD_FEATURES}"
 
 	mkdir -p "flutter/android/app/src/main/jniLibs/${ANDROID_ABI}"
 
-	cp "target/${RUST_TARGET}/release/liblibrustdesk.so" \
-		"flutter/android/app/src/main/jniLibs/${ANDROID_ABI}/librustdesk.so"
+	cp "target/${RUST_TARGET}/release/liblibouterd.so" \
+		"flutter/android/app/src/main/jniLibs/${ANDROID_ABI}/libouterd.so"
 
 	cp "${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${NDK_TARGET}/libc++_shared.so" \
 		"flutter/android/app/src/main/jniLibs/${ANDROID_ABI}/"
